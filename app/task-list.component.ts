@@ -16,9 +16,16 @@ import { Task } from './task.model';
       <option value="medium">medium</option>
       <option value="high">high</option>
     </select>
-    <div *ngFor="let currentTask of childTaskList | completeness:selectedCompleteness | priority:selectedPriority">
+    <select (change)="categoryChange($event.target.value)" class="filter">
+      <option value="all">Show All</option>
+      <option value="work">work</option>
+      <option value="hobby">hobby</option>
+      <option value="home">home</option>
+    </select>
+    <div *ngFor="let currentTask of childTaskList | completeness:selectedCompleteness | priority:selectedPriority | category:selectedCategory">
     <task-display [task]="currentTask"></task-display>
     <button (click)="editButtonHasBeenClicked(currentTask)">Edit</button>
+  
   `
 })
 
@@ -27,6 +34,7 @@ export class TaskListComponent {
   @Output() clickSender = new EventEmitter();
   public selectedCompleteness: string = "notDone";
   public selectedPriority: string = "high";
+  public selectedCategory: string = "work";
   onChange(optionFromMenu) {
     this.selectedCompleteness = optionFromMenu;
     console.log(this.selectedCompleteness);
@@ -34,6 +42,10 @@ export class TaskListComponent {
   priorityChange(optionPriorityFromMenu) {
     this.selectedPriority = optionPriorityFromMenu;
     console.log(this.selectedPriority);
+  }
+  categoryChange(optionCategoryFromMenu) {
+    this.selectedCategory = optionCategoryFromMenu;
+    console.log(this.selectedCategory);
   }
   editButtonHasBeenClicked(taskToEdit: Task) {
     this.clickSender.emit(taskToEdit);
